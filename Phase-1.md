@@ -3,68 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phase 1 – On-Prem WordPress Setup & Validation</title>
 </head>
 <body>
 
+
 <h1>On-Premises to AWS Cloud Migration — WordPress Project</h1>
 
-<p><strong>Status:</strong> <em>Phase 1 (On-Prem WordPress Setup & Validation)</em> <strong>Completed</strong>.</p>
+
+<p><strong>Status:</strong> <em>Phase 1 (On-Prem WordPress Setup & Validation)</em> <strong>in progress</strong>.</p>
+
 
 <p>
-This project demonstrates a realistic enterprise cloud migration scenario where an existing
-<strong>WordPress + MySQL</strong> application is first validated in an on-premises environment
-using <strong>Docker</strong> and <strong>Kubernetes</strong>, before migrating to a
-<strong>VM-based AWS architecture (EC2 + RDS)</strong>.
+This project demonstrates a complete enterprise-grade migration of a WordPress application from on-premises infrastructure to AWS cloud.
+The migration includes containerization using <strong>Docker</strong>, orchestration with <strong>Kubernetes</strong> (on-premises only), 
+CI/CD automation using <strong>Jenkins</strong>, infrastructure provisioning with <strong>Terraform</strong>, 
+and comprehensive monitoring using <strong>Prometheus</strong> and <strong>Grafana</strong>.
 </p>
 
-<p>
-<strong>Important design decision:</strong>
-Docker and Kubernetes are intentionally restricted to the on-prem environment only.
-AWS cloud will use traditional virtual machines and managed database services to minimize
-operational complexity and cost.
-</p>
 
 <hr>
+
 
 <h2>Project Highlights</h2>
 <ul>
-  <li>Existing open-source WordPress application used (no app development)</li>
-  <li>Docker Compose used for standalone application validation</li>
-  <li>Kubernetes used on-prem for container orchestration</li>
-  <li>Dedicated Kubernetes namespace for isolation</li>
-  <li>MySQL database initialization and persistence validation</li>
-  <li>Strong foundation for cloud migration using Terraform and Jenkins (next phases)</li>
+  <li>WordPress application deployed on-premises using Docker Compose</li>
+  <li>Kubernetes manifests created for WordPress + MySQL with persistent storage</li>
+  <li>Dedicated Kubernetes namespace for resource isolation</li>
+  <li>MySQL database initialization and connectivity validation</li>
+  <li>Jenkins CI/CD pipeline for automated testing and deployment</li>
+  <li>Infrastructure as Code using Terraform for AWS provisioning</li>
+  <li>Monitoring and observability with Prometheus and Grafana</li>
+  <li>GitHub webhooks for automated build triggers</li>
 </ul>
+
 
 <hr>
 
-<h2>Architecture Overview</h2>
 
-<h3>🟥 On-Premises Environment (Phase 1)</h3>
+<h2>Project Architecture</h2>
+
+
+<h3>On-Premises Environment</h3>
 <ul>
-  <li>macOS local lab simulating on-prem infrastructure</li>
-  <li>Docker & Docker Compose</li>
-  <li>Kubernetes (local cluster)</li>
-  <li>WordPress Deployment</li>
-  <li>MySQL Deployment with Persistent Volume Claim</li>
-  <li>Jenkins (CI/CD orchestration – upcoming)</li>
+  <li>WordPress running on Docker Compose (validation phase)</li>
+  <li>Kubernetes deployment with MySQL StatefulSet and WordPress Deployment</li>
+  <li>Persistent Volume Claims for database storage</li>
+  <li>NodePort/Port-forward service exposure for local access</li>
+  <li>Jenkins for CI/CD orchestration</li>
 </ul>
 
-<h3>🟦 AWS Cloud (Target – Future Phases)</h3>
+
+<h3>AWS Cloud Environment (Target)</h3>
 <ul>
-  <li>EC2 (Frontend & Backend VMs)</li>
-  <li>RDS MySQL (managed database)</li>
-  <li>Auto Scaling Groups</li>
-  <li>CloudWatch & SNS</li>
-  <li>Terraform for Infrastructure as Code</li>
+  <li>EC2 instances for WordPress application hosting</li>
+  <li>RDS MySQL for managed database service</li>
+  <li>S3 for backups and static assets</li>
+  <li>Application Load Balancer for traffic distribution</li>
+  <li>Route 53 for DNS management</li>
+  <li>CloudWatch for logging and monitoring</li>
+  <li>Auto Scaling Groups for high availability</li>
 </ul>
 
-<p><strong>Note:</strong> Kubernetes, Docker, EKS, EFS, and ALB are NOT used in the AWS cloud.</p>
 
 <hr>
+
 
 <h2>Repository Structure</h2>
+
 
 <pre>
 onprem-to-aws-cloud-migration/
@@ -86,137 +91,425 @@ onprem-to-aws-cloud-migration/
 │   ├── modules/
 │   └── envs/
 └── docs/
-    └── Phase-1.html
 </pre>
+
 
 <hr>
 
-<h2>Phase 1 – On-Prem Setup & Validation</h2>
 
-<h3>Step 1: Environment Validation</h3>
+<h2>Phase 1: On-Premises Setup & Validation</h2>
+
+
+<h3>🟥 STEP 0 — Create the Project Repository</h3>
+
+
+<h4>0.1: Repository Creation</h4>
+<p><strong>Repository name:</strong> <code>onprem-to-aws-cloud-migration</code></p>
+<p><strong>Visibility:</strong> Public</p>
+<p><strong>Initialize with:</strong> README.md</p>
+
+
+<h4>0.2: Clone Repository</h4>
+<pre>
+git clone https://github.com/&lt;your-username&gt;/onprem-to-aws-cloud-migration.git
+cd onprem-to-aws-cloud-migration
+</pre>
+
+
+<h4>0.3: Create Directory Structure</h4>
+<pre>
+mkdir -p on-prem/docker/wordpress
+mkdir -p on-prem/kubernetes/wordpress
+mkdir -p on-prem/jenkins
+mkdir -p terraform/modules
+mkdir -p terraform/envs
+mkdir -p docs
+</pre>
+
+
+<h4>0.4: Initial Commit</h4>
+<pre>
+git add .
+git commit -m "Phase 1: initialize project repository and on-prem structure"
+git push origin main
+</pre>
+
+
+<hr>
+
+
+<h3>🟥 STEP 1 — Setup On-Prem Environment Validation</h3>
+
+
+<h4>1.1: Verify Operating System</h4>
 <pre>
 uname -a
+lsb_release -a || cat /etc/os-release
+</pre>
+
+
+<h4>1.2: Verify Docker</h4>
+<pre>
 docker --version
+docker info
+</pre>
+
+
+<h4>1.3: Verify Kubernetes</h4>
+<pre>
+kubectl version --client
 kubectl get nodes
 </pre>
 
-<p>
-On-prem environment simulated using macOS with Docker Desktop and local Kubernetes.
-</p>
+
+<p><strong>Expected:</strong> 1 node with STATUS = Ready</p>
+
+
+<h4>1.4: Verify Jenkins</h4>
+<pre>
+jenkins --version
+</pre>
+<p>Or open: <code>http://localhost:8080</code></p>
+
 
 <hr>
 
-<h3>Step 2: WordPress Validation using Docker</h3>
 
+<h3>🟥 STEP 2 — Run WordPress using Docker</h3>
+
+
+<h4>2.1: Create Docker Working Directory</h4>
+<pre>
+cd on-prem/docker/wordpress
+</pre>
+
+
+<h4>2.2: Create docker-compose.yml</h4>
+<p>📄 File: <code>on-prem/docker/wordpress/docker-compose.yml</code></p>
+
+
+
+<h4>2.3: Start WordPress using Docker</h4>
 <pre>
 docker compose up -d
+</pre>
+
+
+<h4>2.4: Verify Containers</h4>
+<pre>
 docker ps
 </pre>
 
-<p>
-WordPress validated at:
-<code>http://localhost:8081</code>
-</p>
 
-<p>
-Port was adjusted due to Jenkins already using port 8080.
-</p>
+<p><strong>Expected output:</strong> Both <code>wp-app</code> and <code>wp-mysql</code> running</p>
+
+
+<h4>2.5: Access WordPress</h4>
+<p>Open browser: <code>http://localhost:8081</code></p>
+<p>Complete the WordPress installation setup.</p>
+
 
 <hr>
 
-<h3>Step 3: Kubernetes Namespace Creation</h3>
 
+<h3>🟥 STEP 3 — Create Kubernetes Namespace</h3>
+
+
+<h4>3.1: Create Dedicated Namespace</h4>
 <pre>
 kubectl create namespace wordpress
+</pre>
+
+
+<h4>3.2: Verify Namespace</h4>
+<pre>
 kubectl get namespaces
 </pre>
 
+
+<p><strong>Expected:</strong> <code>wordpress</code> namespace appears in list</p>
+
+
 <hr>
 
-<h3>Step 4: Kubernetes Deployment</h3>
 
+<h3>🟥 STEP 4 — Create Kubernetes Manifests</h3>
+
+
+<h4>4.1: Navigate to Kubernetes Directory</h4>
+<pre>
+cd on-prem/kubernetes/wordpress
+</pre>
+
+
+<h4>4.2: Create MySQL PVC</h4>
+<p>📄 File: <code>mysql-pvc.yaml</code></p>
+
+
+<h4>4.3: Create MySQL Deployment</h4>
+<p>📄 File: <code>mysql-deployment.yaml</code></p>
+
+
+<h4>4.4: Create MySQL Service</h4>
+<p>📄 File: <code>mysql-service.yaml</code></p>
+
+
+<h4>4.5: Create WordPress Deployment</h4>
+<p>📄 File: <code>wordpress-deployment.yaml</code></p>
+
+
+<h4>4.6: Create WordPress Service</h4>
+<p>📄 File: <code>wordpress-service.yaml</code></p>
+
+<hr>
+
+
+<h3>🟥 STEP 5 — Deploy WordPress on Kubernetes</h3>
+
+
+<h4>5.1: Apply All Manifests</h4>
 <pre>
 kubectl apply -f .
+</pre>
+
+
+<h4>5.2: Verify Deployment</h4>
+<pre>
 kubectl get pods -n wordpress
 kubectl get svc -n wordpress
 kubectl get pvc -n wordpress
 </pre>
 
-<hr>
 
-<h3>Step 5: Access WordPress on Kubernetes</h3>
+<p><strong>Expected output:</strong></p>
+<ul>
+  <li>MySQL pod: Running</li>
+  <li>WordPress pod: Running</li>
+  <li>PVC: Bound</li>
+</ul>
 
+
+<h4>5.3: Access WordPress (Port-Forward)</h4>
 <pre>
 kubectl port-forward svc/wordpress 8083:80 -n wordpress
 </pre>
 
-<p>
-WordPress accessible at:
-<code>http://localhost:8083</code>
-</p>
+
+<p>Open browser: <code>http://localhost:8083</code></p>
+<p>Complete WordPress setup if needed.</p>
+
 
 <hr>
 
-<h3>Step 6: MySQL Database Initialization</h3>
 
+<h3>🟥 STEP 6 — Initialize and Verify MySQL Database</h3>
+
+
+<h4>6.1: Get MySQL Pod Name</h4>
 <pre>
-kubectl exec -it &lt;mysql-pod&gt; -n wordpress -- mysql -u root -p
+kubectl get pods -n wordpress | grep mysql
+</pre>
+
+
+<h4>6.2: Exec into MySQL Pod</h4>
+<pre>
+kubectl exec -it &lt;mysql-pod-name&gt; -n wordpress -- mysql -u root -p
+</pre>
+
+
+<p><strong>Password:</strong> <code>rootpassword</code></p>
+
+
+<h4>6.3: Verify Database and Tables</h4>
+<pre>
 SHOW DATABASES;
 USE wordpress;
 SHOW TABLES;
 </pre>
 
-<p>
-WordPress tables were automatically created, confirming successful database initialization.
-</p>
+
+<p><strong>Expected:</strong> WordPress tables like <code>wp_users</code>, <code>wp_posts</code>, <code>wp_options</code> should exist</p>
+
+
+<h4>6.4: Exit MySQL</h4>
+<pre>
+exit;
+</pre>
+
 
 <hr>
 
-<h2>Phase 1 Completion Summary</h2>
 
+<h2>Technical Stack</h2>
+
+
+<h3>On-Premises</h3>
 <ul>
-  <li>Docker-based WordPress validated</li>
-  <li>Kubernetes manifests created and deployed</li>
-  <li>Dedicated namespace used</li>
-  <li>Persistent MySQL storage verified</li>
-  <li>Application accessible and stable</li>
+  <li><strong>Containerization:</strong> Docker, Docker Compose</li>
+  <li><strong>Orchestration:</strong> Kubernetes (local cluster - on-prem only)</li>
+  <li><strong>Database:</strong> MySQL 8.0</li>
+  <li><strong>Application:</strong> WordPress (latest)</li>
+  <li><strong>CI/CD:</strong> Jenkins</li>
+  <li><strong>Version Control:</strong> Git, GitHub</li>
 </ul>
 
+
+<h3>AWS Cloud (Target)</h3>
+<ul>
+  <li><strong>Compute:</strong> EC2 instances</li>
+  <li><strong>Database:</strong> RDS MySQL</li>
+  <li><strong>Storage:</strong> S3 (backups and artifacts)</li>
+  <li><strong>Load Balancing:</strong> Application Load Balancer (ALB)</li>
+  <li><strong>DNS:</strong> Route 53</li>
+  <li><strong>Infrastructure as Code:</strong> Terraform</li>
+  <li><strong>Monitoring:</strong> Prometheus, Grafana (on-prem), CloudWatch (AWS)</li>
+  <li><strong>Auto Scaling:</strong> Auto Scaling Groups</li>
+</ul>
+
+
 <hr>
+
+
+<h2>Phase 1 Completion Checklist</h2>
+
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Status</th>
+      <th>Verification</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Create project repository</td>
+      <td>✅</td>
+      <td>GitHub repo created</td>
+    </tr>
+    <tr>
+      <td>Setup directory structure</td>
+      <td>✅</td>
+      <td>tree -L 3</td>
+    </tr>
+    <tr>
+      <td>Verify Docker installation</td>
+      <td>✅</td>
+      <td>docker --version</td>
+    </tr>
+    <tr>
+      <td>Verify Kubernetes cluster</td>
+      <td>✅</td>
+      <td>kubectl get nodes</td>
+    </tr>
+    <tr>
+      <td>Run WordPress using Docker</td>
+      <td>✅</td>
+      <td>http://localhost:8081</td>
+    </tr>
+    <tr>
+      <td>Create Kubernetes namespace</td>
+      <td>✅</td>
+      <td>kubectl get ns</td>
+    </tr>
+    <tr>
+      <td>Create Kubernetes manifests</td>
+      <td>✅</td>
+      <td>kubectl apply -f .</td>
+    </tr>
+    <tr>
+      <td>Deploy WordPress on Kubernetes</td>
+      <td>✅</td>
+      <td>kubectl get pods -n wordpress</td>
+    </tr>
+    <tr>
+      <td>Expose WordPress service</td>
+      <td>✅</td>
+      <td>kubectl port-forward svc/wordpress 8083:80 -n wordpress</td>
+    </tr>
+    <tr>
+      <td>Initialize MySQL database</td>
+      <td>✅</td>
+      <td>kubectl exec + SHOW TABLES</td>
+    </tr>
+    <tr>
+      <td>Configure Jenkins on-prem</td>
+      <td>⏳</td>
+      <td>Pending</td>
+    </tr>
+    <tr>
+      <td>Setup GitHub webhooks</td>
+      <td>⏳</td>
+      <td>Pending</td>
+    </tr>
+    <tr>
+      <td>Create CI job</td>
+      <td>⏳</td>
+      <td>Pending</td>
+    </tr>
+    <tr>
+      <td>Deploy Prometheus</td>
+      <td>⏳</td>
+      <td>Pending</td>
+    </tr>
+    <tr>
+      <td>Deploy Grafana</td>
+      <td>⏳</td>
+      <td>Pending</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<hr>
+
+
+<h2>Next Steps</h2>
+
+
+<ul>
+  <li>Configure Jenkins for CI/CD automation</li>
+  <li>Setup GitHub webhooks for automated builds</li>
+  <li>Deploy monitoring stack (Prometheus + Grafana)</li>
+  <li>Create Terraform modules for AWS infrastructure</li>
+  <li>Migrate WordPress to AWS EC2</li>
+  <li>Configure RDS MySQL database</li>
+  <li>Setup Application Load Balancer and Route 53</li>
+  <li>Implement CloudWatch monitoring</li>
+</ul>
+
+
+<hr>
+
 
 <h2>Interview Talking Points</h2>
 
-<p><strong>Why Kubernetes only on-prem?</strong></p>
-<p>
-“Kubernetes was used on-prem for development and validation.
-Cloud deployment intentionally uses VM-based architecture to reduce cost and operational overhead.”
-</p>
 
-<p><strong>Why Docker before Kubernetes?</strong></p>
-<p>
-“Validating applications in Docker before Kubernetes helps isolate issues and reduces orchestration complexity.”
-</p>
+<p><strong>Why separate namespace?</strong></p>
+<p>"We deployed WordPress into a dedicated Kubernetes namespace instead of default to maintain isolation and follow production best practices."</p>
 
-<p><strong>Database initialization strategy?</strong></p>
-<p>
-“WordPress initializes the database schema automatically.
-My responsibility was ensuring correct connectivity, credentials, and persistence.”
-</p>
 
-<hr>
+<p><strong>Why Docker first, then Kubernetes?</strong></p>
+<p>"In real DevOps workflows, we validate applications standalone using Docker before introducing orchestration complexity with Kubernetes."</p>
 
-<h2>Next Phase</h2>
 
-<ul>
-  <li>Configure Jenkins CI pipeline</li>
-  <li>Integrate GitHub webhooks</li>
-  <li>Prepare Terraform modules for AWS EC2 & RDS</li>
-  <li>Begin on-prem → AWS migration</li>
-</ul>
+<p><strong>Database initialization approach?</strong></p>
+<p>"WordPress automatically initializes the database schema during first startup. My responsibility was to ensure connectivity, persistence, and credentials were configured correctly."</p>
+
+
+<p><strong>Port conflict handling?</strong></p>
+<p>"The default port was already occupied by Jenkins, so we adjusted the application port to avoid conflicts. This is common practice in shared on-prem environments."</p>
+
+
+<p><strong>Why Kubernetes only on-premises?</strong></p>
+<p>"We used Kubernetes on-premises for development and validation. For AWS migration, we opted for a VM-based deployment using EC2 and RDS to minimize complexity and cost while maintaining enterprise-grade reliability."</p>
+
 
 <hr>
 
-<p><strong>— Phase 1 completed successfully</strong></p>
+
+<p><strong>— On-Premises to AWS Cloud Migration Project</strong></p>
+
 
 </body>
 </html>
