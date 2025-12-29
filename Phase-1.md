@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project 2: On-Premises to AWS Cloud Migration</title>
 </head>
 <body>
 
@@ -348,6 +347,13 @@ It showcases strong skills in Terraform, AWS infrastructure, Jenkins automation,
     </tr>
   </tbody>
 </table>
+
+<p>
+Note: This project intentionally avoids cloud load balancers and DNS services.
+The application is accessed via EC2 public IPs to keep the migration simple,
+cost-efficient, and focused on infrastructure automation.
+</p>
+
 
 </body>
 </html>
