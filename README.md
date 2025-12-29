@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project 2: On-Premises to AWS Cloud Migration</title>
 </head>
 <body>
 
@@ -101,7 +102,7 @@ to AWS cloud infrastructure, while:
   <li>Integrate GitHub Webhooks with Jenkins</li>
 </ul>
 <h4>Outcome</h4>
-<p>✅ Stable on-prem WordPress application ready for migration</p>
+<p>🔄 <strong>In Progress</strong> - Stable on-prem WordPress application ready for migration</p>
 
 <h3>🔹 Phase 2: Migration Planning &amp; Design</h3>
 <h4>Objective</h4>
@@ -115,7 +116,7 @@ to AWS cloud infrastructure, while:
   <li>Focus on reliability, simplicity, and cost efficiency</li>
 </ul>
 <h4>Outcome</h4>
-<p>✅ Clear and interview-safe migration architecture</p>
+<p>⏳ <strong>Pending</strong> - Clear and interview-safe migration architecture</p>
 
 <h3>🔹 Phase 3: AWS Infrastructure Provisioning (Terraform)</h3>
 <h4>Objective</h4>
@@ -132,7 +133,7 @@ to AWS cloud infrastructure, while:
   <li>S3 backend for Terraform state</li>
 </ul>
 <h4>Outcome</h4>
-<p>✅ Fully automated and reproducible AWS environment</p>
+<p>⏳ <strong>Pending</strong> - Fully automated and reproducible AWS environment</p>
 
 <h3>🔹 Phase 4: CI/CD Automation with Jenkins</h3>
 <h4>Objective</h4>
@@ -160,7 +161,7 @@ to AWS cloud infrastructure, while:
   <li>Validate application health</li>
 </ul>
 <h4>Outcome</h4>
-<p>✅ End-to-end automated cloud migration pipeline</p>
+<p>⏳ <strong>Pending</strong> - End-to-end automated cloud migration pipeline</p>
 
 <h3>🔹 Phase 5: Database Migration (On-Prem → RDS)</h3>
 <h4>Objective</h4>
@@ -174,7 +175,7 @@ to AWS cloud infrastructure, while:
   <li>Maintain rollback backups</li>
 </ul>
 <h4>Outcome</h4>
-<p>✅ WordPress database migrated with consistency and reliability</p>
+<p>⏳ <strong>Pending</strong> - WordPress database migrated with consistency and reliability</p>
 
 <h3>🔹 Phase 6: Scaling &amp; Resilience</h3>
 <h4>Objective</h4>
@@ -186,7 +187,7 @@ to AWS cloud infrastructure, while:
   <li>EC2 and RDS health metrics via CloudWatch</li>
 </ul>
 <h4>Outcome</h4>
-<p>✅ Self-healing and scalable WordPress infrastructure</p>
+<p>⏳ <strong>Pending</strong> - Self-healing and scalable WordPress infrastructure</p>
 
 <h3>🔹 Phase 7: Monitoring &amp; Alerting</h3>
 <h4>Objective</h4>
@@ -209,7 +210,7 @@ to AWS cloud infrastructure, while:
   <li>Verified migration success using monitoring data</li>
 </ul>
 <h4>Outcome</h4>
-<p>✅ Full observability and alerting enabled</p>
+<p>⏳ <strong>Pending</strong> - Full observability and alerting enabled</p>
 
 <h2>🧰 Tech Stack</h2>
 
@@ -304,6 +305,49 @@ It showcases strong skills in Terraform, AWS infrastructure, Jenkins automation,
 ✔ cost-aware<br>
 ✔ interview-safe<br>
 ✔ DevOps-focused 💎</p>
+
+<hr>
+
+<h2>📊 Project Status Summary</h2>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Phase</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Phase 1: On-Premises WordPress Application Setup</td>
+      <td>🔄 In Progress</td>
+    </tr>
+    <tr>
+      <td>Phase 2: Migration Planning &amp; Design</td>
+      <td>⏳ Pending</td>
+    </tr>
+    <tr>
+      <td>Phase 3: AWS Infrastructure Provisioning (Terraform)</td>
+      <td>⏳ Pending</td>
+    </tr>
+    <tr>
+      <td>Phase 4: CI/CD Automation with Jenkins</td>
+      <td>⏳ Pending</td>
+    </tr>
+    <tr>
+      <td>Phase 5: Database Migration (On-Prem → RDS)</td>
+      <td>⏳ Pending</td>
+    </tr>
+    <tr>
+      <td>Phase 6: Scaling &amp; Resilience</td>
+      <td>⏳ Pending</td>
+    </tr>
+    <tr>
+      <td>Phase 7: Monitoring &amp; Alerting</td>
+      <td>⏳ Pending</td>
+    </tr>
+  </tbody>
+</table>
 
 </body>
 </html>
