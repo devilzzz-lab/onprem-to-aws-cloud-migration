@@ -296,7 +296,7 @@ kubectl port-forward svc/wordpress 8083:80 -n wordpress
 
 
 <p>Open browser: <code>http://localhost:8083</code></p>
-<p>Complete WordPress setup if needed.</p>
+<p>Complete WordPress setup so that in next step will show output</p>
 
 
 <hr>
