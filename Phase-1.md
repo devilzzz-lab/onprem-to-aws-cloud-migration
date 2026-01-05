@@ -93,7 +93,9 @@ onprem-to-aws-cloud-migration/
 ├── terraform/
 │   ├── modules/
 │   └── envs/
-└── docs/
+├── docs/
+└── demo-videos/
+    └── kubernetes-Cluster.MOV
 </pre>
 
 <hr>
@@ -123,6 +125,7 @@ mkdir -p on-prem/jenkins
 mkdir -p terraform/modules
 mkdir -p terraform/envs
 mkdir -p docs
+mkdir -p demo-videos
 </pre>
 
 <h4>0.4: Initial Commit</h4>
@@ -242,6 +245,7 @@ kubectl apply -f .
 
 <h4>5.2: Verify Deployment</h4>
 
+
 <p><strong>Expected output:</strong></p>
 <ul>
   <li>MySQL pod: Running</li>
@@ -317,31 +321,24 @@ kubectl apply -f namespace.yaml
 <h4>7.4: Create Prometheus ConfigMap</h4>
 <p>📄 File: <code>prometheus-config.yaml</code></p>
 
-
 <h4>7.5: Create Prometheus Deployment</h4>
 <p>📄 File: <code>prometheus-deployment.yaml</code></p>
 
 <h4>7.6: Create Prometheus Service</h4>
 <p>📄 File: <code>prometheus-service.yaml</code></p>
 
-<h4>7.7: Create kube-state-metrics-service</h4>
-<p>📄 File: <code>kube-state-metrics-service.yaml</code></p>
-
-
-<h4>7.8: Deploy Node Exporter (DaemonSet)</h4>
+<h4>7.7: Deploy Node Exporter (DaemonSet)</h4>
 <p>📄 File: <code>node-exporter.yaml</code></p>
 
-
-<h4>7.9: Deploy kube-state-metrics</h4>
+<h4>7.8: Deploy kube-state-metrics</h4>
 <p>📄 File: <code>kube-state-metrics.yaml</code></p>
 
-
-<h4>7.10: Apply All Monitoring Manifests</h4>
+<h4>7.9: Apply All Monitoring Manifests</h4>
 <pre>
 kubectl apply -f . -n monitoring-wp
 </pre>
 
-<h4>7.11: Verify Prometheus Stack</h4>
+<h4>7.10: Verify Prometheus Stack</h4>
 <pre>
 kubectl get pods -n monitoring-wp
 kubectl get svc -n monitoring-wp
@@ -354,14 +351,14 @@ kubectl get svc -n monitoring-wp
   <li>kube-state-metrics pod: Running</li>
 </ul>
 
-<h4>7.12: Access Prometheus UI</h4>
+<h4>7.11: Access Prometheus UI</h4>
 <pre>
 kubectl port-forward svc/prometheus 9090:9090 -n monitoring-wp
 </pre>
 
 <p>Open browser: <code>http://localhost:9090</code></p>
 
-<h4>7.13: Verify Metrics Collection</h4>
+<h4>7.12: Verify Metrics Collection</h4>
 <p>In Prometheus UI, navigate to <strong>Graph</strong> tab and test these queries:</p>
 
 <pre>
@@ -387,10 +384,8 @@ cd on-prem/monitoring/grafana
 <h4>8.3: Create Grafana ConfigMap (Datasource)</h4>
 <p>📄 File: <code>grafana-config.yaml</code></p>
 
-
 <h4>8.4: Create Grafana Deployment</h4>
 <p>📄 File: <code>grafana-deployment.yaml</code></p>
-
 
 <h4>8.5: Create Grafana Service</h4>
 <p>📄 File: <code>grafana-service.yaml</code></p>
@@ -440,35 +435,35 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
 <p><strong>Expected:</strong> "Data source is working" ✅</p>
 
 <h4>8.10: Import Kubernetes Dashboards</h4>
-<p>Import official Kubernetes monitoring dashboards:</p>
+<p>Import Kubernetes monitoring dashboards using JSON files:</p>
 
 <ol>
   <li>Navigate to <strong>Dashboards → Import</strong></li>
-  <li>Import the following dashboard IDs:</li>
+  <li>Import via dashboard JSON model</li>
 </ol>
 
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr>
       <th>Dashboard</th>
-      <th>ID</th>
+      <th>JSON File Location</th>
       <th>Purpose</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Kubernetes Cluster Overview</td>
-      <td>315</td>
+      <td><code>/grafana-dash-json/Kubernetes-cluster-monitoring.json</code></td>
       <td>Cluster-wide metrics</td>
     </tr>
     <tr>
       <td>Kubernetes Pods / Containers</td>
-      <td>6417</td>
+      <td><code>/grafana-dash-json/Kubernetes-Cluster.json</code></td>
       <td>Pod-level monitoring</td>
     </tr>
     <tr>
       <td>Node Exporter Full</td>
-      <td>1860</td>
+      <td><code>/grafana-dash-json/Node-Exporter.json</code></td>
       <td>Node CPU/Memory/Disk</td>
     </tr>
   </tbody>
@@ -476,13 +471,22 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
 
 <p><strong>For each dashboard:</strong></p>
 <ul>
-  <li>Enter the Dashboard ID</li>
+  <li>Copy the JSON content from the file</li>
+  <li>Paste into the <strong>Import via dashboard JSON model</strong> field</li>
   <li>Click <strong>Load</strong></li>
   <li>Select datasource: <strong>Prometheus</strong></li>
   <li>Click <strong>Import</strong></li>
 </ul>
 
-<h4>8.11: Verify WordPress Metrics Visibility</h4>
+<h4>8.11: Demo Video - Kubernetes Cluster Dashboard</h4>
+<p>Watch the Kubernetes Cluster monitoring dashboard in action:</p>
+
+<video width="800" controls>
+  <source src="/demo-videos/kubernetes-Cluster.MOV" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<h4>8.12: Verify WordPress Metrics Visibility</h4>
 <p>In Grafana <strong>Explore</strong> tab, test these queries:</p>
 
 <pre>
@@ -490,6 +494,7 @@ kube_pod_info{namespace="wordpress"}
 container_cpu_usage_seconds_total{namespace="wordpress"}
 container_memory_usage_bytes{namespace="wordpress"}
 </pre>
+
 <p><strong>Expected:</strong> WordPress and MySQL pod metrics are visible ✅</p>
 
 <hr>
@@ -709,7 +714,7 @@ container_memory_usage_bytes{namespace="wordpress"}
 <p>"Grafana stores dashboards and user data on disk, so we mounted a persistent volume at /var/lib/grafana to ensure state survives pod restarts. This is critical for production observability platforms."</p>
 
 <p><strong>How were dashboards added?</strong></p>
-<p>"Grafana dashboards were imported using official community IDs and backed by Prometheus as the datasource. This provides standardized Kubernetes monitoring out of the box."</p>
+<p>"Grafana dashboards were imported using JSON files and backed by Prometheus as the datasource. This provides standardized Kubernetes monitoring with custom configurations."</p>
 
 <p><strong>What metrics do you monitor?</strong></p>
 <p>"We monitor node health (CPU, memory, disk), pod status, container resource usage, and application availability. All WordPress and MySQL pods are tracked in real-time through Grafana dashboards."</p>
