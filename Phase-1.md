@@ -405,97 +405,103 @@ kube_pod_info
   </thead>
   <tbody>
     <tr>
-      <td>Create project repository</td>
+      <td>Select open-source application (WordPress)</td>
       <td>✅</td>
-      <td>GitHub repo created</td>
+      <td>Project decision documented</td>
     </tr>
     <tr>
-      <td>Setup directory structure</td>
+      <td>uname -a (macOS local on-prem lab)</td>
       <td>✅</td>
-      <td>tree -L 3</td>
+      <td>On-premises environment simulated</td>
     </tr>
     <tr>
-      <td>Verify Docker installation</td>
+      <td>Install Docker</td>
       <td>✅</td>
       <td>docker --version</td>
     </tr>
     <tr>
-      <td>Verify Kubernetes cluster</td>
+      <td>Install Kubernetes (local cluster)</td>
       <td>✅</td>
       <td>kubectl get nodes</td>
     </tr>
     <tr>
-      <td>Run WordPress using Docker</td>
+      <td>Pull WordPress Docker image</td>
       <td>✅</td>
-      <td>http://localhost:8081</td>
+      <td>docker images</td>
     </tr>
     <tr>
-      <td>Create Kubernetes namespace</td>
+      <td>Pull MySQL Docker image</td>
       <td>✅</td>
-      <td>kubectl get ns</td>
+      <td>docker images</td>
     </tr>
     <tr>
-      <td>Create Kubernetes manifests</td>
+      <td>Verify WordPress UI accessibility</td>
       <td>✅</td>
-      <td>kubectl apply -f .</td>
+      <td>WordPress setup screen</td>
+    </tr>
+    <tr>
+      <td>Create Kubernetes manifests (WP + MySQL)</td>
+      <td>✅</td>
+      <td>kubectl apply -f</td>
     </tr>
     <tr>
       <td>Deploy WordPress on Kubernetes</td>
       <td>✅</td>
-      <td>kubectl get pods -n wordpress</td>
+      <td>kubectl get pods</td>
     </tr>
     <tr>
       <td>Expose WordPress service</td>
       <td>✅</td>
-      <td>kubectl port-forward svc/wordpress 8083:80 -n wordpress</td>
+      <td>Expose WordPress service</td>
     </tr>
     <tr>
       <td>Initialize MySQL database</td>
       <td>✅</td>
-      <td>kubectl exec + SHOW TABLES</td>
-    </tr>
-    <tr>
-      <td>Deploy Prometheus</td>
-      <td>✅</td>
-      <td>kubectl get pods -n monitoring-wp</td>
-    </tr>
-    <tr>
-      <td>Deploy Node Exporter</td>
-      <td>✅</td>
-      <td>kubectl get ds -n monitoring-wp</td>
-    </tr>
-    <tr>
-      <td>Deploy kube-state-metrics</td>
-      <td>✅</td>
-      <td>Prometheus UI metrics visible</td>
-    </tr>
-    <tr>
-      <td>Verify Prometheus metrics</td>
-      <td>✅</td>
-      <td>http://localhost:9090 + queries</td>
+      <td>MySQL login test</td>
     </tr>
     <tr>
       <td>Configure Jenkins on-prem</td>
-      <td>⏳</td>
-      <td>Pending</td>
+      <td>✅</td>
+      <td>Jenkins UI</td>
     </tr>
     <tr>
-      <td>Setup GitHub webhooks</td>
-      <td>⏳</td>
-      <td>Pending</td>
+      <td>Integrate GitHub Webhooks with Jenkins</td>
+      <td>✅</td>
+      <td>Webhook trigger test</td>
     </tr>
     <tr>
-      <td>Create CI job</td>
-      <td>⏳</td>
-      <td>Pending</td>
+      <td>Configure CI job (build & test)</td>
+      <td>✅</td>
+      <td>Jenkins job logs</td>
     </tr>
     <tr>
-      <td>Deploy Grafana</td>
+      <td>Install Prometheus (on-prem)</td>
+      <td>✅</td>
+      <td>Prometheus UI</td>
+    </tr>
+    <tr>
+      <td>Install Grafana (on-prem)</td>
       <td>⏳</td>
-      <td>Pending</td>
+      <td>Grafana dashboard</td>
+    </tr>
+    <tr>
+      <td>Monitor WordPress pods</td>
+      <td>⏳</td>
+      <td>Metrics visible</td>
+    </tr>
+    <tr>
+      <td>Validate application stability</td>
+      <td>⏳</td>
+      <td>No pod restarts</td>
+    </tr>
+    <tr>
+      <td>Document on-prem architecture</td>
+      <td>⏳</td>
+      <td>README / diagram</td>
     </tr>
   </tbody>
 </table>
+
 
 <hr>
 
