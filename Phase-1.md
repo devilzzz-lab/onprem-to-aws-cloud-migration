@@ -42,6 +42,7 @@ and comprehensive monitoring using <strong>Prometheus</strong> and <strong>Grafa
   <li>Persistent Volume Claims for database storage</li>
   <li>NodePort/Port-forward service exposure for local access</li>
   <li>Jenkins for CI/CD orchestration</li>
+  <li>Prometheus + Node Exporter + kube-state-metrics for monitoring</li>
 </ul>
 
 <h3>AWS Cloud Environment (Target)</h3>
@@ -72,6 +73,15 @@ onprem-to-aws-cloud-migration/
 │   │       ├── mysql-service.yaml
 │   │       ├── wordpress-deployment.yaml
 │   │       └── wordpress-service.yaml
+│   ├── monitoring/
+│   │   └── prometheus/
+│   │       ├── namespace.yaml
+│   │       ├── prometheus-rbac.yaml
+│   │       ├── prometheus-config.yaml
+│   │       ├── prometheus-deployment.yaml
+│   │       ├── prometheus-service.yaml
+│   │       ├── node-exporter.yaml
+│   │       └── kube-state-metrics.yaml
 │   └── jenkins/
 │       └── Jenkinsfile
 ├── terraform/
@@ -93,7 +103,7 @@ onprem-to-aws-cloud-migration/
 
 <h4>0.2: Clone Repository</h4>
 <pre>
-git clone https://github.com/&lt;your-username&gt;/onprem-to-aws-cloud-migration.git
+git clone https://github.com/devilzzz-lab/onprem-to-aws-cloud-migration.git
 cd onprem-to-aws-cloud-migration
 </pre>
 
@@ -101,6 +111,7 @@ cd onprem-to-aws-cloud-migration
 <pre>
 mkdir -p on-prem/docker/wordpress
 mkdir -p on-prem/kubernetes/wordpress
+mkdir -p on-prem/monitoring/prometheus
 mkdir -p on-prem/jenkins
 mkdir -p terraform/modules
 mkdir -p terraform/envs
@@ -156,7 +167,6 @@ cd on-prem/docker/wordpress
 <h4>2.2: Create docker-compose.yml</h4>
 <p>📄 File: <code>on-prem/docker/wordpress/docker-compose.yml</code></p>
 
-
 <h4>2.3: Start WordPress using Docker</h4>
 <pre>
 docker compose up -d
@@ -201,7 +211,6 @@ cd on-prem/kubernetes/wordpress
 <h4>4.2: Create MySQL PVC</h4>
 <p>📄 File: <code>mysql-pvc.yaml</code></p>
 
-
 <h4>4.3: Create MySQL Deployment</h4>
 <p>📄 File: <code>mysql-deployment.yaml</code></p>
 
@@ -213,10 +222,8 @@ cd on-prem/kubernetes/wordpress
 <h4>4.5: Create WordPress Deployment</h4>
 <p>📄 File: <code>wordpress-deployment.yaml</code></p>
 
-
 <h4>4.6: Create WordPress Service</h4>
 <p>📄 File: <code>wordpress-service.yaml</code></p>
-
 
 <hr>
 
@@ -281,6 +288,85 @@ exit;
 
 <hr>
 
+<h3>🟥 STEP 7 — Deploy Prometheus Monitoring Stack</h3>
+
+<h4>7.1: Navigate to Monitoring Directory</h4>
+<pre>
+cd on-prem/monitoring/prometheus
+</pre>
+
+<h4>7.2: Create Namespace for Monitoring</h4>
+<p>📄 File: <code>namespace.yaml</code></p>
+
+<pre>
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring-wp
+</pre>
+
+<p><strong>Apply:</strong></p>
+<pre>
+kubectl apply -f namespace.yaml
+</pre>
+
+<h4>7.3: Create Prometheus RBAC</h4>
+<p>📄 File: <code>prometheus-rbac.yaml</code></p>
+
+<h4>7.4: Create Prometheus ConfigMap</h4>
+<p>📄 File: <code>prometheus-config.yaml</code></p>
+
+
+<h4>7.6: Create Prometheus Service</h4>
+<p>📄 File: <code>prometheus-service.yaml</code></p>
+
+
+<h4>7.7: Deploy Node Exporter (DaemonSet)</h4>
+<p>📄 File: <code>node-exporter.yaml</code></p>
+
+
+<h4>7.8: Deploy kube-state-metrics</h4>
+<p>📄 File: <code>kube-state-metrics.yaml</code></p>
+
+
+<h4>7.9: Apply All Monitoring Manifests</h4>
+<pre>
+kubectl apply -f . -n monitoring-wp
+</pre>
+
+<h4>7.10: Verify Prometheus Stack</h4>
+<pre>
+kubectl get pods -n monitoring-wp
+kubectl get svc -n monitoring-wp
+</pre>
+
+<p><strong>Expected output:</strong></p>
+<ul>
+  <li>prometheus pod: Running</li>
+  <li>node-exporter pods: Running (DaemonSet)</li>
+  <li>kube-state-metrics pod: Running</li>
+</ul>
+
+<h4>7.11: Access Prometheus UI</h4>
+<pre>
+kubectl port-forward svc/prometheus 9090:9090 -n monitoring-wp
+</pre>
+
+<p>Open browser: <code>http://localhost:9090</code></p>
+
+<h4>7.12: Verify Metrics Collection</h4>
+<p>In Prometheus UI, navigate to <strong>Graph</strong> tab and test these queries:</p>
+
+<pre>
+up
+container_cpu_usage_seconds_total
+kube_pod_info
+</pre>
+
+<p><strong>Expected:</strong> All queries should return data ✅</p>
+
+<hr>
+
 <h2>Technical Stack</h2>
 
 <h3>On-Premises</h3>
@@ -290,6 +376,7 @@ exit;
   <li><strong>Database:</strong> MySQL 8.0</li>
   <li><strong>Application:</strong> WordPress (latest)</li>
   <li><strong>CI/CD:</strong> Jenkins</li>
+  <li><strong>Monitoring:</strong> Prometheus, Node Exporter, kube-state-metrics</li>
   <li><strong>Version Control:</strong> Git, GitHub</li>
 </ul>
 
@@ -299,7 +386,7 @@ exit;
   <li><strong>Database:</strong> RDS MySQL</li>
   <li><strong>Storage:</strong> S3 (backups and artifacts)</li>
   <li><strong>Infrastructure as Code:</strong> Terraform</li>
-  <li><strong>Monitoring:</strong> Prometheus, Grafana (on-prem), CloudWatch (AWS)</li>
+  <li><strong>Monitoring:</strong> CloudWatch (AWS)</li>
   <li><strong>Auto Scaling:</strong> Auto Scaling Groups</li>
   <li><strong>Alerts:</strong> SNS</li>
 </ul>
@@ -368,6 +455,26 @@ exit;
       <td>kubectl exec + SHOW TABLES</td>
     </tr>
     <tr>
+      <td>Deploy Prometheus</td>
+      <td>✅</td>
+      <td>kubectl get pods -n monitoring-wp</td>
+    </tr>
+    <tr>
+      <td>Deploy Node Exporter</td>
+      <td>✅</td>
+      <td>kubectl get ds -n monitoring-wp</td>
+    </tr>
+    <tr>
+      <td>Deploy kube-state-metrics</td>
+      <td>✅</td>
+      <td>Prometheus UI metrics visible</td>
+    </tr>
+    <tr>
+      <td>Verify Prometheus metrics</td>
+      <td>✅</td>
+      <td>http://localhost:9090 + queries</td>
+    </tr>
+    <tr>
       <td>Configure Jenkins on-prem</td>
       <td>⏳</td>
       <td>Pending</td>
@@ -379,11 +486,6 @@ exit;
     </tr>
     <tr>
       <td>Create CI job</td>
-      <td>⏳</td>
-      <td>Pending</td>
-    </tr>
-    <tr>
-      <td>Deploy Prometheus</td>
       <td>⏳</td>
       <td>Pending</td>
     </tr>
@@ -400,9 +502,9 @@ exit;
 <h2>Next Steps</h2>
 
 <ul>
+  <li>Deploy Grafana and create WordPress monitoring dashboards</li>
   <li>Configure Jenkins for CI/CD automation</li>
   <li>Setup GitHub webhooks for automated builds</li>
-  <li>Deploy monitoring stack (Prometheus + Grafana)</li>
   <li>Create Terraform modules for AWS infrastructure</li>
   <li>Migrate WordPress to AWS EC2</li>
   <li>Configure RDS MySQL database</li>
@@ -428,6 +530,9 @@ exit;
 
 <p><strong>Why Kubernetes only on-premises?</strong></p>
 <p>"We used Kubernetes on-premises for development and validation. For AWS migration, we opted for a VM-based deployment using EC2 and RDS to minimize complexity and cost while maintaining enterprise-grade reliability."</p>
+
+<p><strong>Prometheus metrics troubleshooting?</strong></p>
+<p>"Initially Prometheus showed no metrics because exporters and RBAC were missing. I resolved this by deploying node-exporter, kube-state-metrics, and proper RBAC, enabling full Kubernetes observability."</p>
 
 <hr>
 
