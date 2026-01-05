@@ -481,10 +481,7 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
 <h4>8.11: Demo Video - Kubernetes Cluster Dashboard</h4>
 <p>Watch the Kubernetes Cluster monitoring dashboard in action:</p>
 
-<video width="800" controls>
-  <source src="https://github.com/user-attachments/assets/034821b9-8c3c-435a-9e89-42270b696a43" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<pre>https://drive.google.com/file/d/1bWOzmHVN1CsPF3BLwH8nTQWmBSrbZjKX/view?usp=sharing</pre>
 
 <h4>8.12: Verify WordPress Metrics Visibility</h4>
 <p>In Grafana <strong>Explore</strong> tab, test these queries:</p>
