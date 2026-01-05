@@ -101,7 +101,8 @@ to AWS cloud infrastructure, while:
   <li>Integrate GitHub Webhooks with Jenkins</li>
 </ul>
 <h4>Outcome</h4>
-<p>🔄 <strong>In Progress</strong> - Stable on-prem WordPress application ready for migration</p>
+<p>✅ <strong>Finished</strong> - Stable on-prem WordPress application ready for migration</p>
+<h4>Demo Video of Phase-1</h4>
 
 <h3>🔹 Phase 2: Migration Planning &amp; Design</h3>
 <h4>Objective</h4>
@@ -319,7 +320,7 @@ It showcases strong skills in Terraform, AWS infrastructure, Jenkins automation,
   <tbody>
     <tr>
       <td>Phase 1: On-Premises WordPress Application Setup</td>
-      <td>🔄 In Progress</td>
+      <td>✅ Finished</td>
     </tr>
     <tr>
       <td>Phase 2: Migration Planning &amp; Design</td>
