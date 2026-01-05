@@ -19,6 +19,8 @@ spec:
         image: prom/prometheus:v3.8.1
         args:
         - "--config.file=/etc/prometheus/prometheus.yml"
+        - "--storage.tsdb.retention.time=7d"
+        - "--web.enable-lifecycle"
         ports:
         - containerPort: 9090
         volumeMounts:
