@@ -482,7 +482,7 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
 <p>Watch the Kubernetes Cluster monitoring dashboard in action:</p>
 
 <video width="800" controls>
-  <source src="demo-videos/kubernetes-cluster-1.mp4" type="video/mp4">
+  <source src="https://github.com/user-attachments/assets/034821b9-8c3c-435a-9e89-42270b696a43" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
