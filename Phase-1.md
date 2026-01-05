@@ -480,8 +480,11 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
 
 <h4>8.11: Demo Video - Kubernetes Cluster Dashboard</h4>
 <p>Watch the Kubernetes Cluster monitoring dashboard in action:</p>
-
-<pre>https://drive.google.com/file/d/1bWOzmHVN1CsPF3BLwH8nTQWmBSrbZjKX/view?usp=sharing</pre>
+<p>
+  <a href="https://drive.google.com/file/d/1bWOzmHVN1CsPF3BLwH8nTQWmBSrbZjKX/view?usp=sharing" target="_blank">
+    📹 Click here to watch the Kubernetes Cluster Dashboard demo video
+  </a>
+</p>
 
 <h4>8.12: Verify WordPress Metrics Visibility</h4>
 <p>In Grafana <strong>Explore</strong> tab, test these queries:</p>
