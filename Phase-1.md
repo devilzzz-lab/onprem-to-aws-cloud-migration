@@ -324,21 +324,24 @@ kubectl apply -f namespace.yaml
 <h4>7.6: Create Prometheus Service</h4>
 <p>📄 File: <code>prometheus-service.yaml</code></p>
 
+<h4>7.7: Create kube-state-metrics-service</h4>
+<p>📄 File: <code>kube-state-metrics-service.yaml</code></p>
 
-<h4>7.7: Deploy Node Exporter (DaemonSet)</h4>
+
+<h4>7.8: Deploy Node Exporter (DaemonSet)</h4>
 <p>📄 File: <code>node-exporter.yaml</code></p>
 
 
-<h4>7.8: Deploy kube-state-metrics</h4>
+<h4>7.9: Deploy kube-state-metrics</h4>
 <p>📄 File: <code>kube-state-metrics.yaml</code></p>
 
 
-<h4>7.9: Apply All Monitoring Manifests</h4>
+<h4>7.10: Apply All Monitoring Manifests</h4>
 <pre>
 kubectl apply -f . -n monitoring-wp
 </pre>
 
-<h4>7.10: Verify Prometheus Stack</h4>
+<h4>7.11: Verify Prometheus Stack</h4>
 <pre>
 kubectl get pods -n monitoring-wp
 kubectl get svc -n monitoring-wp
@@ -351,14 +354,14 @@ kubectl get svc -n monitoring-wp
   <li>kube-state-metrics pod: Running</li>
 </ul>
 
-<h4>7.11: Access Prometheus UI</h4>
+<h4>7.12: Access Prometheus UI</h4>
 <pre>
 kubectl port-forward svc/prometheus 9090:9090 -n monitoring-wp
 </pre>
 
 <p>Open browser: <code>http://localhost:9090</code></p>
 
-<h4>7.12: Verify Metrics Collection</h4>
+<h4>7.13: Verify Metrics Collection</h4>
 <p>In Prometheus UI, navigate to <strong>Graph</strong> tab and test these queries:</p>
 
 <pre>
