@@ -8,7 +8,7 @@
 
 <h1>On-Premises to AWS Cloud Migration — WordPress Project</h1>
 
-<p><strong>Status:</strong> <em>Phase 1 (On-Prem WordPress Setup & Validation)</em> <strong>in progress</strong>.</p>
+<p><strong>Status:</strong> <em>Phase 1 (On-Prem WordPress Setup & Validation)</em> <strong>completed</strong>.</p>
 
 <p>
 This project demonstrates a complete enterprise-grade migration of a WordPress application from on-premises infrastructure to AWS cloud.
@@ -43,6 +43,7 @@ and comprehensive monitoring using <strong>Prometheus</strong> and <strong>Grafa
   <li>NodePort/Port-forward service exposure for local access</li>
   <li>Jenkins for CI/CD orchestration</li>
   <li>Prometheus + Node Exporter + kube-state-metrics for monitoring</li>
+  <li>Grafana with persistent storage for visualization</li>
 </ul>
 
 <h3>AWS Cloud Environment (Target)</h3>
@@ -74,14 +75,19 @@ onprem-to-aws-cloud-migration/
 │   │       ├── wordpress-deployment.yaml
 │   │       └── wordpress-service.yaml
 │   ├── monitoring/
-│   │   └── prometheus/
-│   │       ├── namespace.yaml
-│   │       ├── prometheus-rbac.yaml
-│   │       ├── prometheus-config.yaml
-│   │       ├── prometheus-deployment.yaml
-│   │       ├── prometheus-service.yaml
-│   │       ├── node-exporter.yaml
-│   │       └── kube-state-metrics.yaml
+│   │   ├── prometheus/
+│   │   │   ├── namespace.yaml
+│   │   │   ├── prometheus-rbac.yaml
+│   │   │   ├── prometheus-config.yaml
+│   │   │   ├── prometheus-deployment.yaml
+│   │   │   ├── prometheus-service.yaml
+│   │   │   ├── node-exporter.yaml
+│   │   │   └── kube-state-metrics.yaml
+│   │   └── grafana/
+│   │       ├── grafana-pvc.yaml
+│   │       ├── grafana-config.yaml
+│   │       ├── grafana-deployment.yaml
+│   │       └── grafana-service.yaml
 │   └── jenkins/
 │       └── Jenkinsfile
 ├── terraform/
@@ -112,6 +118,7 @@ cd onprem-to-aws-cloud-migration
 mkdir -p on-prem/docker/wordpress
 mkdir -p on-prem/kubernetes/wordpress
 mkdir -p on-prem/monitoring/prometheus
+mkdir -p on-prem/monitoring/grafana
 mkdir -p on-prem/jenkins
 mkdir -p terraform/modules
 mkdir -p terraform/envs
@@ -167,6 +174,7 @@ cd on-prem/docker/wordpress
 <h4>2.2: Create docker-compose.yml</h4>
 <p>📄 File: <code>on-prem/docker/wordpress/docker-compose.yml</code></p>
 
+
 <h4>2.3: Start WordPress using Docker</h4>
 <pre>
 docker compose up -d
@@ -214,10 +222,8 @@ cd on-prem/kubernetes/wordpress
 <h4>4.3: Create MySQL Deployment</h4>
 <p>📄 File: <code>mysql-deployment.yaml</code></p>
 
-
 <h4>4.4: Create MySQL Service</h4>
 <p>📄 File: <code>mysql-service.yaml</code></p>
-
 
 <h4>4.5: Create WordPress Deployment</h4>
 <p>📄 File: <code>wordpress-deployment.yaml</code></p>
@@ -235,11 +241,6 @@ kubectl apply -f .
 </pre>
 
 <h4>5.2: Verify Deployment</h4>
-<pre>
-kubectl get pods -n wordpress
-kubectl get svc -n wordpress
-kubectl get pvc -n wordpress
-</pre>
 
 <p><strong>Expected output:</strong></p>
 <ul>
@@ -317,6 +318,9 @@ kubectl apply -f namespace.yaml
 <p>📄 File: <code>prometheus-config.yaml</code></p>
 
 
+<h4>7.5: Create Prometheus Deployment</h4>
+<p>📄 File: <code>prometheus-deployment.yaml</code></p>
+
 <h4>7.6: Create Prometheus Service</h4>
 <p>📄 File: <code>prometheus-service.yaml</code></p>
 
@@ -367,6 +371,126 @@ kube_pod_info
 
 <hr>
 
+<h3>🟥 STEP 8 — Deploy Grafana with Persistent Storage</h3>
+
+<h4>8.1: Navigate to Grafana Directory</h4>
+<pre>
+cd on-prem/monitoring/grafana
+</pre>
+
+<h4>8.2: Create Grafana PVC</h4>
+<p>📄 File: <code>grafana-pvc.yaml</code></p>
+
+<h4>8.3: Create Grafana ConfigMap (Datasource)</h4>
+<p>📄 File: <code>grafana-config.yaml</code></p>
+
+
+<h4>8.4: Create Grafana Deployment</h4>
+<p>📄 File: <code>grafana-deployment.yaml</code></p>
+
+
+<h4>8.5: Create Grafana Service</h4>
+<p>📄 File: <code>grafana-service.yaml</code></p>
+
+<h4>8.6: Apply Grafana Manifests</h4>
+<pre>
+kubectl apply -f grafana-pvc.yaml
+kubectl apply -f grafana-config.yaml
+kubectl apply -f grafana-deployment.yaml
+kubectl apply -f grafana-service.yaml
+</pre>
+
+<h4>8.7: Verify Grafana Deployment</h4>
+<pre>
+kubectl get pods -n monitoring-wp
+kubectl get pvc -n monitoring-wp
+kubectl get svc -n monitoring-wp
+</pre>
+
+<p><strong>Expected output:</strong></p>
+<ul>
+  <li>grafana pod: Running</li>
+  <li>grafana-pvc: Bound</li>
+</ul>
+
+<h4>8.8: Access Grafana UI</h4>
+<pre>
+kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
+</pre>
+
+<p>Open browser: <code>http://localhost:3000</code></p>
+
+<p><strong>Login credentials:</strong></p>
+<ul>
+  <li>Username: <code>admin</code></li>
+  <li>Password: <code>admin</code></li>
+</ul>
+
+<h4>8.9: Verify Prometheus Datasource</h4>
+<p>In Grafana UI:</p>
+<ol>
+  <li>Navigate to <strong>⚙️ Connections → Data sources</strong></li>
+  <li>Prometheus should be listed with a <strong>GREEN</strong> status</li>
+  <li>Click <strong>Test</strong> to verify connectivity</li>
+</ol>
+
+<p><strong>Expected:</strong> "Data source is working" ✅</p>
+
+<h4>8.10: Import Kubernetes Dashboards</h4>
+<p>Import official Kubernetes monitoring dashboards:</p>
+
+<ol>
+  <li>Navigate to <strong>Dashboards → Import</strong></li>
+  <li>Import the following dashboard IDs:</li>
+</ol>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Dashboard</th>
+      <th>ID</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Kubernetes Cluster Overview</td>
+      <td>315</td>
+      <td>Cluster-wide metrics</td>
+    </tr>
+    <tr>
+      <td>Kubernetes Pods / Containers</td>
+      <td>6417</td>
+      <td>Pod-level monitoring</td>
+    </tr>
+    <tr>
+      <td>Node Exporter Full</td>
+      <td>1860</td>
+      <td>Node CPU/Memory/Disk</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>For each dashboard:</strong></p>
+<ul>
+  <li>Enter the Dashboard ID</li>
+  <li>Click <strong>Load</strong></li>
+  <li>Select datasource: <strong>Prometheus</strong></li>
+  <li>Click <strong>Import</strong></li>
+</ul>
+
+<h4>8.11: Verify WordPress Metrics Visibility</h4>
+<p>In Grafana <strong>Explore</strong> tab, test these queries:</p>
+
+<pre>
+kube_pod_info{namespace="wordpress"}
+container_cpu_usage_seconds_total{namespace="wordpress"}
+container_memory_usage_bytes{namespace="wordpress"}
+</pre>
+<p><strong>Expected:</strong> WordPress and MySQL pod metrics are visible ✅</p>
+
+<hr>
+
 <h2>Technical Stack</h2>
 
 <h3>On-Premises</h3>
@@ -376,7 +500,7 @@ kube_pod_info
   <li><strong>Database:</strong> MySQL 8.0</li>
   <li><strong>Application:</strong> WordPress (latest)</li>
   <li><strong>CI/CD:</strong> Jenkins</li>
-  <li><strong>Monitoring:</strong> Prometheus, Node Exporter, kube-state-metrics</li>
+  <li><strong>Monitoring:</strong> Prometheus, Node Exporter, kube-state-metrics, Grafana</li>
   <li><strong>Version Control:</strong> Git, GitHub</li>
 </ul>
 
@@ -481,41 +605,79 @@ kube_pod_info
     </tr>
     <tr>
       <td>Install Grafana (on-prem)</td>
-      <td>⏳</td>
-      <td>Grafana dashboard</td>
+      <td>✅</td>
+      <td>Grafana dashboard + PVC Bound</td>
     </tr>
     <tr>
       <td>Monitor WordPress pods</td>
-      <td>⏳</td>
-      <td>Metrics visible</td>
+      <td>✅</td>
+      <td>Metrics visible in Grafana</td>
     </tr>
     <tr>
       <td>Validate application stability</td>
-      <td>⏳</td>
+      <td>✅</td>
       <td>No pod restarts</td>
     </tr>
     <tr>
       <td>Document on-prem architecture</td>
-      <td>⏳</td>
+      <td>✅</td>
       <td>README / diagram</td>
     </tr>
   </tbody>
 </table>
 
+<hr>
+
+<h2>Monitoring Stack Summary</h2>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Status</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Prometheus</td>
+      <td>✅</td>
+      <td>Metrics collection and storage</td>
+    </tr>
+    <tr>
+      <td>Node Exporter</td>
+      <td>✅</td>
+      <td>Node-level metrics (CPU, memory, disk)</td>
+    </tr>
+    <tr>
+      <td>kube-state-metrics</td>
+      <td>✅</td>
+      <td>Kubernetes object metrics</td>
+    </tr>
+    <tr>
+      <td>Grafana</td>
+      <td>✅</td>
+      <td>Visualization and dashboards</td>
+    </tr>
+    <tr>
+      <td>WordPress metrics</td>
+      <td>✅</td>
+      <td>Visible in dashboards</td>
+    </tr>
+  </tbody>
+</table>
 
 <hr>
 
 <h2>Next Steps</h2>
 
 <ul>
-  <li>Deploy Grafana and create WordPress monitoring dashboards</li>
-  <li>Configure Jenkins for CI/CD automation</li>
-  <li>Setup GitHub webhooks for automated builds</li>
+  <li>Begin Phase 2: Migration Planning & Design</li>
   <li>Create Terraform modules for AWS infrastructure</li>
-  <li>Migrate WordPress to AWS EC2</li>
-  <li>Configure RDS MySQL database</li>
-  <li>Configure Auto Scaling Groups for high availability</li>
-  <li>Implement CloudWatch monitoring and SNS alerts</li>
+  <li>Design VPC architecture with public and private subnets</li>
+  <li>Plan database migration strategy from on-prem MySQL to RDS</li>
+  <li>Define security groups and IAM roles</li>
+  <li>Document cloud architecture diagrams</li>
 </ul>
 
 <hr>
@@ -539,6 +701,33 @@ kube_pod_info
 
 <p><strong>Prometheus metrics troubleshooting?</strong></p>
 <p>"Initially Prometheus showed no metrics because exporters and RBAC were missing. I resolved this by deploying node-exporter, kube-state-metrics, and proper RBAC, enabling full Kubernetes observability."</p>
+
+<p><strong>Why Grafana needs persistent storage?</strong></p>
+<p>"Grafana stores dashboards and user data on disk, so we mounted a persistent volume at /var/lib/grafana to ensure state survives pod restarts. This is critical for production observability platforms."</p>
+
+<p><strong>How were dashboards added?</strong></p>
+<p>"Grafana dashboards were imported using official community IDs and backed by Prometheus as the datasource. This provides standardized Kubernetes monitoring out of the box."</p>
+
+<p><strong>What metrics do you monitor?</strong></p>
+<p>"We monitor node health (CPU, memory, disk), pod status, container resource usage, and application availability. All WordPress and MySQL pods are tracked in real-time through Grafana dashboards."</p>
+
+<hr>
+
+<h2>✅ Phase 1 Complete</h2>
+
+<p><strong>Achievements:</strong></p>
+<ul>
+  <li>✅ Docker validation completed</li>
+  <li>✅ Kubernetes deployment operational</li>
+  <li>✅ MySQL database initialized and verified</li>
+  <li>✅ Jenkins CI/CD configured with GitHub webhooks</li>
+  <li>✅ Prometheus monitoring stack deployed</li>
+  <li>✅ Grafana dashboards configured with persistent storage</li>
+  <li>✅ WordPress metrics visible and monitored</li>
+  <li>✅ On-premises architecture documented</li>
+</ul>
+
+<p><strong>Ready to proceed to Phase 2: AWS Infrastructure Planning</strong></p>
 
 <hr>
 
