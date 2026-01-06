@@ -28,9 +28,9 @@ and comprehensive monitoring using <strong>Prometheus</strong> and <strong>Grafa
 
 <h2>Phase 1: On-Premises Setup & Validation</h2>
 
-<h3>🟥 STEP 0 — CLone the Project Repository</h3>
+<h3>🟥 STEP 0 — Clone the Project Repository</h3>
 
-<h4>1.0: Clone Repository</h4>
+<h4>0.1: Clone Repository</h4>
 <pre>
 git clone https://github.com/devilzzz-lab/onprem-to-aws-cloud-migration.git
 cd onprem-to-aws-cloud-migration
@@ -74,21 +74,18 @@ jenkins --version
 cd on-prem/docker/wordpress
 </pre>
 
-<h4>2.2: Create docker-compose.yml</h4>
-<p>📄 File: <code>on-prem/docker/wordpress/docker-compose.yml</code></p>
-
-<h4>2.3: Start WordPress using Docker</h4>
+<h4>2.2: Start WordPress using Docker</h4>
 <pre>
 docker compose up -d
 </pre>
 
-<h4>2.4: Verify Containers</h4>
+<h4>2.3: Verify Containers</h4>
 <pre>
 docker ps
 </pre>
 <p><strong>Expected output:</strong> Both <code>wp-app</code> and <code>wp-mysql</code> running</p>
 
-<h4>2.5: Access WordPress</h4>
+<h4>2.4: Access WordPress</h4>
 <p>Open browser: <code>http://localhost:8081</code></p>
 <p>Complete the WordPress installation setup.</p>
 
@@ -109,38 +106,19 @@ kubectl get namespaces
 
 <hr>
 
-<h3>🟥 STEP 4 — Create Kubernetes Manifests</h3>
+<h3>🟥 STEP 4 — Deploy WordPress on Kubernetes</h3>
 
 <h4>4.1: Navigate to Kubernetes Directory</h4>
 <pre>
 cd on-prem/kubernetes/wordpress
 </pre>
 
-<h4>4.2: Create MySQL PVC</h4>
-<p>📄 File: <code>mysql-pvc.yaml</code></p>
-
-<h4>4.3: Create MySQL Deployment</h4>
-<p>📄 File: <code>mysql-deployment.yaml</code></p>
-
-<h4>4.4: Create MySQL Service</h4>
-<p>📄 File: <code>mysql-service.yaml</code></p>
-
-<h4>4.5: Create WordPress Deployment</h4>
-<p>📄 File: <code>wordpress-deployment.yaml</code></p>
-
-<h4>4.6: Create WordPress Service</h4>
-<p>📄 File: <code>wordpress-service.yaml</code></p>
-
-<hr>
-
-<h3>🟥 STEP 5 — Deploy WordPress on Kubernetes</h3>
-
-<h4>5.1: Apply All Manifests</h4>
+<h4>4.2: Apply All Manifests</h4>
 <pre>
 kubectl apply -f .
 </pre>
 
-<h4>5.2: Verify Deployment</h4>
+<h4>4.3: Verify Deployment</h4>
 <pre>
 kubectl get pods -n wordpress
 kubectl get svc -n wordpress
@@ -154,7 +132,7 @@ kubectl get pvc -n wordpress
   <li>PVC: Bound</li>
 </ul>
 
-<h4>5.3: Access WordPress (Port-Forward)</h4>
+<h4>4.4: Access WordPress (Port-Forward)</h4>
 <pre>
 kubectl port-forward svc/wordpress 8083:80 -n wordpress
 </pre>
@@ -163,20 +141,20 @@ kubectl port-forward svc/wordpress 8083:80 -n wordpress
 
 <hr>
 
-<h3>🟥 STEP 6 — Initialize and Verify MySQL Database</h3>
+<h3>🟥 STEP 5 — Initialize and Verify MySQL Database</h3>
 
-<h4>6.1: Get MySQL Pod Name</h4>
+<h4>5.1: Get MySQL Pod Name</h4>
 <pre>
 kubectl get pods -n wordpress | grep mysql
 </pre>
 
-<h4>6.2: Exec into MySQL Pod</h4>
+<h4>5.2: Exec into MySQL Pod</h4>
 <pre>
 kubectl exec -it &lt;mysql-pod-name&gt; -n wordpress -- mysql -u root -p
 </pre>
 <p><strong>Password:</strong> <code>rootpassword</code></p>
 
-<h4>6.3: Verify Database and Tables</h4>
+<h4>5.3: Verify Database and Tables</h4>
 <pre>
 SHOW DATABASES;
 USE wordpress;
@@ -184,57 +162,31 @@ SHOW TABLES;
 </pre>
 <p><strong>Expected:</strong> WordPress tables like <code>wp_users</code>, <code>wp_posts</code>, <code>wp_options</code> should exist</p>
 
-<h4>6.4: Exit MySQL</h4>
+<h4>5.4: Exit MySQL</h4>
 <pre>
 exit;
 </pre>
 
 <hr>
 
-<h3>🟥 STEP 7 — Deploy Prometheus Monitoring Stack</h3>
+<h3>🟥 STEP 6 — Deploy Prometheus Monitoring Stack</h3>
 
-<h4>7.1: Navigate to Monitoring Directory</h4>
+<h4>6.1: Navigate to Monitoring Directory</h4>
 <pre>
 cd on-prem/monitoring/prometheus
 </pre>
 
-<h4>7.2: Create Namespace for Monitoring</h4>
-<p>📄 File: <code>namespace.yaml</code></p>
-<pre>
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: monitoring-wp
-</pre>
-<p><strong>Apply:</strong></p>
+<h4>6.2: Apply Namespace</h4>
 <pre>
 kubectl apply -f namespace.yaml
 </pre>
 
-<h4>7.3: Create Prometheus RBAC</h4>
-<p>📄 File: <code>prometheus-rbac.yaml</code></p>
-
-<h4>7.4: Create Prometheus ConfigMap</h4>
-<p>📄 File: <code>prometheus-config.yaml</code></p>
-
-<h4>7.5: Create Prometheus Deployment</h4>
-<p>📄 File: <code>prometheus-deployment.yaml</code></p>
-
-<h4>7.6: Create Prometheus Service</h4>
-<p>📄 File: <code>prometheus-service.yaml</code></p>
-
-<h4>7.7: Deploy Node Exporter (DaemonSet)</h4>
-<p>📄 File: <code>node-exporter.yaml</code></p>
-
-<h4>7.8: Deploy kube-state-metrics</h4>
-<p>📄 File: <code>kube-state-metrics.yaml</code></p>
-
-<h4>7.9: Apply All Monitoring Manifests</h4>
+<h4>6.3: Apply All Monitoring Manifests</h4>
 <pre>
-kubectl apply -f . -n monitoring-wp
+kubectl apply -f .
 </pre>
 
-<h4>7.10: Verify Prometheus Stack</h4>
+<h4>6.4: Verify Prometheus Stack</h4>
 <pre>
 kubectl get pods -n monitoring-wp
 kubectl get svc -n monitoring-wp
@@ -247,13 +199,13 @@ kubectl get svc -n monitoring-wp
   <li>kube-state-metrics pod: Running</li>
 </ul>
 
-<h4>7.11: Access Prometheus UI</h4>
+<h4>6.5: Access Prometheus UI</h4>
 <pre>
 kubectl port-forward svc/prometheus 9090:9090 -n monitoring-wp
 </pre>
 <p>Open browser: <code>http://localhost:9090</code></p>
 
-<h4>7.12: Verify Metrics Collection</h4>
+<h4>6.6: Verify Metrics Collection</h4>
 <p>In Prometheus UI, navigate to <strong>Graph</strong> tab and test these queries:</p>
 <pre>
 up
@@ -264,26 +216,14 @@ kube_pod_info
 
 <hr>
 
-<h3>🟥 STEP 8 — Deploy Grafana with Persistent Storage</h3>
+<h3>🟥 STEP 7 — Deploy Grafana with Persistent Storage</h3>
 
-<h4>8.1: Navigate to Grafana Directory</h4>
+<h4>7.1: Navigate to Grafana Directory</h4>
 <pre>
 cd on-prem/monitoring/grafana
 </pre>
 
-<h4>8.2: Create Grafana PVC</h4>
-<p>📄 File: <code>grafana-pvc.yaml</code></p>
-
-<h4>8.3: Create Grafana ConfigMap (Datasource)</h4>
-<p>📄 File: <code>grafana-config.yaml</code></p>
-
-<h4>8.4: Create Grafana Deployment</h4>
-<p>📄 File: <code>grafana-deployment.yaml</code></p>
-
-<h4>8.5: Create Grafana Service</h4>
-<p>📄 File: <code>grafana-service.yaml</code></p>
-
-<h4>8.6: Apply Grafana Manifests</h4>
+<h4>7.2: Apply Grafana Manifests</h4>
 <pre>
 kubectl apply -f grafana-pvc.yaml
 kubectl apply -f grafana-config.yaml
@@ -291,7 +231,7 @@ kubectl apply -f grafana-deployment.yaml
 kubectl apply -f grafana-service.yaml
 </pre>
 
-<h4>8.7: Verify Grafana Deployment</h4>
+<h4>7.3: Verify Grafana Deployment</h4>
 <pre>
 kubectl get pods -n monitoring-wp
 kubectl get pvc -n monitoring-wp
@@ -304,7 +244,7 @@ kubectl get svc -n monitoring-wp
   <li>grafana-pvc: Bound</li>
 </ul>
 
-<h4>8.8: Access Grafana UI</h4>
+<h4>7.4: Access Grafana UI</h4>
 <pre>
 kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
 </pre>
@@ -316,7 +256,7 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
   <li>Password: <code>admin</code></li>
 </ul>
 
-<h4>8.9: Verify Prometheus Datasource</h4>
+<h4>7.5: Verify Prometheus Datasource</h4>
 <p>In Grafana UI:</p>
 <ol>
   <li>Navigate to <strong>⚙️ Connections → Data sources</strong></li>
@@ -325,7 +265,7 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
 </ol>
 <p><strong>Expected:</strong> "Data source is working" ✅</p>
 
-<h4>8.10: Import Kubernetes Dashboards</h4>
+<h4>7.6: Import Kubernetes Dashboards</h4>
 <p>Import Kubernetes monitoring dashboards using JSON files:</p>
 <ol>
   <li>Navigate to <strong>Dashboards → Import</strong></li>
@@ -367,7 +307,7 @@ kubectl port-forward svc/grafana 3000:3000 -n monitoring-wp
   <li>Click <strong>Import</strong></li>
 </ul>
 
-<h4>8.11: Verify WordPress Metrics Visibility</h4>
+<h4>7.7: Verify WordPress Metrics Visibility</h4>
 <p>In Grafana <strong>Explore</strong> tab, test these queries:</p>
 <pre>
 kube_pod_info{namespace="wordpress"}
