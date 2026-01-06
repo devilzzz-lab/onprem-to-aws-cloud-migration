@@ -69,7 +69,7 @@ jenkins --version
 
 <h3>🟥 STEP 2 — Run WordPress using Docker</h3>
 
-<h4>2.1: Create Docker Working Directory</h4>
+<h4>2.1: Navigate to Docker Working Directory</h4>
 <pre>
 cd on-prem/docker/wordpress
 </pre>
