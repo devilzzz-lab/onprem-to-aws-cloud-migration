@@ -39,6 +39,18 @@ to AWS cloud infrastructure, while:
   <li>Automating infrastructure provisioning and deployments</li>
 </ul>
 
+<h2>✨ Project Highlights</h2>
+<ul>
+  <li>WordPress application deployed on-premises using Docker Compose</li>
+  <li>Kubernetes manifests created for WordPress + MySQL with persistent storage</li>
+  <li>Dedicated Kubernetes namespace for resource isolation</li>
+  <li>MySQL database initialization and connectivity validation</li>
+  <li>Jenkins CI/CD pipeline for automated testing and deployment</li>
+  <li>Infrastructure as Code using Terraform for AWS provisioning</li>
+  <li>Monitoring and observability with Prometheus and Grafana</li>
+  <li>GitHub webhooks for automated build triggers</li>
+</ul>
+
 <h2>🎯 Migration Objectives</h2>
 <ul>
   <li>Migrate WordPress application from on-prem to AWS</li>
@@ -50,41 +62,78 @@ to AWS cloud infrastructure, while:
   <li>Maintain a clear separation between on-prem and cloud responsibilities</li>
 </ul>
 
-<h2>🏗️ High-Level Architecture</h2>
+<h2>🏗️ Architecture Overview</h2>
 
 <h3>🟥 On-Premises (Source Environment)</h3>
 <ul>
-  <li>Existing open-source WordPress + MySQL</li>
-  <li>Docker</li>
-  <li>Kubernetes (local cluster)</li>
-  <li>Jenkins (CI + CD orchestration)</li>
-  <li>Prometheus &amp; Grafana</li>
-  <li>GitHub Webhooks</li>
+  <li>Open-source WordPress + MySQL application</li>
+  <li>Docker Compose for initial application validation</li>
+  <li>Kubernetes (local cluster) for container orchestration</li>
+  <li>WordPress Deployment and MySQL StatefulSet</li>
+  <li>Persistent Volume Claims (PVC) for database storage</li>
+  <li>NodePort / Port-forwarding for local access</li>
+  <li>Jenkins for CI/CD pipeline orchestration</li>
+  <li>GitHub Webhooks for automated pipeline triggers</li>
+  <li>Prometheus for metrics collection</li>
+  <li>Node Exporter and kube-state-metrics</li>
+  <li>Grafana with persistent storage for monitoring dashboards</li>
 </ul>
-<p>👉 Used for development, testing, and validation only</p>
+<p>👉 Used for development, testing, CI/CD validation, and monitoring only</p>
 
 <h3>🟦 AWS Cloud (Target Environment)</h3>
 <ul>
-  <li>NO EKS</li>
-  <li>NO Kubernetes</li>
-  <li>NO Docker</li>
-  <li>NO kind</li>
-  <li>Terraform (Infrastructure as Code)</li>
-  <li>VPC</li>
-  <li>Public &amp; Private Subnets</li>
-  <li>EC2 instances:
-    <ul>
-      <li>WordPress Frontend</li>
-      <li>PHP Backend</li>
-    </ul>
-  </li>
-  <li>RDS (MySQL)</li>
-  <li>Auto Scaling Group</li>
-  <li>CloudWatch</li>
-  <li>SNS</li>
-  <li>S3 (artifacts &amp; backups)</li>
+  <li>Traditional VM-based deployment (No Kubernetes, No Docker, No EKS)</li>
+  <li>Terraform for Infrastructure as Code (IaC)</li>
+  <li>VPC with Public and Private Subnets</li>
+  <li>EC2 instances for WordPress application hosting</li>
+  <li>Auto Scaling Group for high availability</li>
+  <li>Application Load Balancer</li>
+  <li>RDS (MySQL) as managed database service</li>
+  <li>S3 for application artifacts and backups</li>
+  <li>CloudWatch for logging and monitoring</li>
+  <li>SNS for alerting and notifications</li>
 </ul>
-<p>👉 Traditional VM-based cloud deployment</p>
+<p>👉 Production-ready cloud infrastructure deployed without containers</p>
+
+<h2>📁 Repository Structure</h2>
+
+<pre>
+onprem-to-aws-cloud-migration/
+├── README.md
+├── on-prem/
+│   ├── docker/
+│   │   └── wordpress/
+│   │       └── docker-compose.yml
+│   ├── kubernetes/
+│   │   └── wordpress/
+│   │       ├── mysql-pvc.yaml
+│   │       ├── mysql-deployment.yaml
+│   │       ├── mysql-service.yaml
+│   │       ├── wordpress-deployment.yaml
+│   │       └── wordpress-service.yaml
+│   ├── monitoring/
+│   │   ├── prometheus/
+│   │   │   ├── namespace.yaml
+│   │   │   ├── prometheus-rbac.yaml
+│   │   │   ├── prometheus-config.yaml
+│   │   │   ├── prometheus-deployment.yaml
+│   │   │   ├── prometheus-service.yaml
+│   │   │   ├── node-exporter.yaml
+│   │   │   └── kube-state-metrics.yaml
+│   │   └── grafana/
+│   │       ├── grafana-pvc.yaml
+│   │       ├── grafana-config.yaml
+│   │       ├── grafana-deployment.yaml
+│   │       └── grafana-service.yaml
+│   └── jenkins/
+│       └── Jenkinsfile
+├── terraform/
+│   ├── modules/
+│   └── envs/
+├── docs/
+└── demo-videos/
+    └── kubernetes-Cluster.MOV
+</pre>
 
 <h2>🧩 Project Phases</h2>
 
@@ -102,7 +151,6 @@ to AWS cloud infrastructure, while:
 </ul>
 <h4>Outcome</h4>
 <p>✅ <strong>Finished</strong> - Stable on-prem WordPress application ready for migration</p>
-<h4>Demo Video of Phase-1</h4>
 
 <h3>🔹 Phase 2: Migration Planning &amp; Design</h3>
 <h4>Objective</h4>
@@ -183,6 +231,7 @@ to AWS cloud infrastructure, while:
 <h4>Implementation</h4>
 <ul>
   <li>Auto Scaling Groups for WordPress EC2 instances</li>
+  <li>Application Load Balancer for traffic distribution</li>
   <li>Automatic instance replacement on failure</li>
   <li>EC2 and RDS health metrics via CloudWatch</li>
 </ul>
@@ -236,7 +285,11 @@ to AWS cloud infrastructure, while:
     </tr>
     <tr>
       <td>Cloud Compute</td>
-      <td>EC2</td>
+      <td>EC2, Auto Scaling Groups</td>
+    </tr>
+    <tr>
+      <td>Load Balancing</td>
+      <td>Application Load Balancer</td>
     </tr>
     <tr>
       <td>Database</td>
@@ -244,7 +297,7 @@ to AWS cloud infrastructure, while:
     </tr>
     <tr>
       <td>Networking</td>
-      <td>VPC, Subnets</td>
+      <td>VPC, Subnets, Internet Gateway</td>
     </tr>
     <tr>
       <td>Monitoring</td>
@@ -256,7 +309,7 @@ to AWS cloud infrastructure, while:
     </tr>
     <tr>
       <td>Storage</td>
-      <td>S3</td>
+      <td>S3, EBS</td>
     </tr>
     <tr>
       <td>Languages</td>
@@ -269,7 +322,7 @@ to AWS cloud infrastructure, while:
 <p>
 Migrated a legacy WordPress application from on-premises to AWS using Terraform and Jenkins.
 Automated infrastructure provisioning, WordPress deployment, and MySQL database migration using a VM-based cloud architecture (EC2 + RDS).
-Designed a cost-aware and reliable AWS environment with Auto Scaling, monitoring, and alerting.
+Designed a cost-aware and reliable AWS environment with Auto Scaling, Load Balancing, monitoring, and alerting.
 </p>
 
 <h2>🎯 Key Takeaways</h2>
@@ -283,10 +336,11 @@ Designed a cost-aware and reliable AWS environment with Auto Scaling, monitoring
 
 <h2>🚀 Future Enhancements (Optional)</h2>
 <ul>
-  <li>Introduce cloud load balancing</li>
   <li>Blue/green WordPress deployments</li>
   <li>Multi-AZ RDS configuration</li>
+  <li>CloudFront CDN integration</li>
   <li>Cost optimization and tagging strategy</li>
+  <li>Infrastructure drift detection</li>
 </ul>
 
 <h2>🏁 Conclusion</h2>
