@@ -87,7 +87,7 @@ docker ps
 
 <h4>2.4: Access WordPress</h4>
 <p>Open browser: <code>http://localhost:8081</code></p>
-<p>Verification of the WordPress installation page opens up<strong>Not needed to setup,close the terminal</strong></p>
+<p>Verification of the WordPress installation page opens up <strong>Not needed to setup,close the terminal</strong></p>
 
 <hr>
 
