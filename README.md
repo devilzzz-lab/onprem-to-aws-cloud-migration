@@ -116,7 +116,7 @@ to AWS cloud infrastructure, while:
   <li>Focus on reliability, simplicity, and cost efficiency</li>
 </ul>
 <h4>Outcome</h4>
-<p>⏳ <strong>Pending</strong> - Clear and interview-safe migration architecture</p>
+<p>⏳ <strong>Work Started</strong> - Clear and interview-safe migration architecture</p>
 
 <h3>🔹 Phase 3: AWS Infrastructure Provisioning (Terraform)</h3>
 <h4>Objective</h4>
@@ -324,7 +324,7 @@ It showcases strong skills in Terraform, AWS infrastructure, Jenkins automation,
     </tr>
     <tr>
       <td>Phase 2: Migration Planning &amp; Design</td>
-      <td>⏳ Pending</td>
+      <td>⏳ Started</td>
     </tr>
     <tr>
       <td>Phase 3: AWS Infrastructure Provisioning (Terraform)</td>
