@@ -318,32 +318,6 @@ container_memory_usage_bytes{namespace="wordpress"}
 
 <hr>
 
-<h2>🧰 Technical Stack</h2>
-
-<h3>On-Premises</h3>
-<ul>
-  <li><strong>Containerization:</strong> Docker, Docker Compose</li>
-  <li><strong>Orchestration:</strong> Kubernetes (local cluster - on-prem only)</li>
-  <li><strong>Database:</strong> MySQL 8.0</li>
-  <li><strong>Application:</strong> WordPress (latest)</li>
-  <li><strong>CI/CD:</strong> Jenkins</li>
-  <li><strong>Monitoring:</strong> Prometheus, Node Exporter, kube-state-metrics, Grafana</li>
-  <li><strong>Version Control:</strong> Git, GitHub</li>
-</ul>
-
-<h3>AWS Cloud (Target)</h3>
-<ul>
-  <li><strong>Compute:</strong> EC2 instances</li>
-  <li><strong>Database:</strong> RDS MySQL</li>
-  <li><strong>Storage:</strong> S3 (backups and artifacts)</li>
-  <li><strong>Infrastructure as Code:</strong> Terraform</li>
-  <li><strong>Monitoring:</strong> CloudWatch (AWS)</li>
-  <li><strong>Auto Scaling:</strong> Auto Scaling Groups</li>
-  <li><strong>Alerts:</strong> SNS</li>
-</ul>
-
-<hr>
-
 <h2>✅ Phase 1 Completion Checklist</h2>
 
 <table border="1" cellpadding="8" cellspacing="0">
