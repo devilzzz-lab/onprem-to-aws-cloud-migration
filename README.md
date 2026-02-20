@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1>🛠️ Project 2: On-Premises to AWS Cloud Migration using Terraform &amp; DevOps Automation</h1>
+<h1>🛠️ On-Premises to AWS Cloud Migration using Terraform &amp; DevOps Automation</h1>
 
 <h2>📌 Overview</h2>
 <p>
